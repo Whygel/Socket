@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Zahlenempfang</title>
+</head>
+<body>
+    <h1>Empfangene Zahl:</h1>
+    <h2 id="output">–</h2>
+    <script>
+        
+        const socket = new WebSocket("ws://localhost:5244/ws");
+
+        socket.onmessage = (event) => {
+            document.getElementById("output").innerText = event.data;
+        };
+
+        socket.onopen = () => console.log("Verbunden");
+        socket.onclose = () => console.log("Verbindung geschlossen");
+    </script>
+</body>
+</html>
