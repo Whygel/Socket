@@ -1,6 +1,6 @@
 const margin = { top: 20, right: 40, bottom: 30, left: 120 };
     const width = 800 - margin.left - margin.right;
-    const height = 400 - margin.top - margin.bottom;
+    const height = 600 - margin.top - margin.bottom;
 
     const svg = d3.select("#chart")
       .append("svg")
@@ -45,21 +45,16 @@ const url = "ws://localhost:5244/ws";
         socket.onmessage = (event) => {
             try {                
                const obj = JSON.parse(event.data);
-                data = Object.keys(obj).map(key => ({
-                company: key,
-                value: obj[key]
+                data = obj.map(item => ({
+                    company: item.Company,
+                    value: item.Value,
+                    logo: item.Logo
                 }));
 
                 updateChart(data);
              
-               // test();
-               // const labels = Object.keys(obj); // Array mit den Schlüsseln
-              //  const values = labels.map(l => obj[l]);
-              //  ensureChart(labels, values);
-              //  lastEl.innerText = JSON.stringify(obj);
             } catch (err) {
                 console.error('Fehler beim Parsen:', err);
-               // lastEl.innerText = event.data;
             }
         };
 
@@ -72,12 +67,12 @@ const url = "ws://localhost:5244/ws";
 
     console.log("Daten erhalten:", data);
 
-      // 🔹 Sortieren nach Wert (Ranking)
-      data.sort((a, b) => b.value - a.value);
+      // 🔹 Sortieren nach Wert (Ranking) und Top 6 nehmen
+      data = data.sort((a, b) => b.value - a.value).slice(0, 6);
 
       // 🔹 Skalen aktualisieren
       xScale.domain([0, d3.max(data, d => d.value)]);
-      yScale.domain(data.map(d => d.company));
+      yScale.domain(data.map(d => d.company)).range([0, height]);
 
       // 🔹 Balken
       const bars = svg.selectAll(".bar")
@@ -87,7 +82,7 @@ const url = "ws://localhost:5244/ws";
         .append("rect")
         .attr("class", "bar")
         .attr("x", 0)
-        .attr("y", d => yScale(d.company))
+        .attr("y", height) // Start von unten
         .attr("height", yScale.bandwidth())
         .attr("width", 0)
         .merge(bars)
@@ -120,12 +115,40 @@ const url = "ws://localhost:5244/ws";
 
       labels.exit().remove();
 
+      // 🔹 Y-Achsen Labels mit Logos
+      const labelGroups = svg.selectAll(".label-group")
+        .data(data, d => d.company);
+
+      const enterGroups = labelGroups.enter()
+        .append("g")
+        .attr("class", "label-group")
+        .attr("transform", `translate(0, ${height})`); // Start von unten
+
+      enterGroups.append("image")
+        .attr("xlink:href", d => `data:image/png;base64,${d.logo}`)
+        .attr("width", 20)
+        .attr("height", 20)
+        .attr("x", -40)
+        .attr("y", -10);
+
+      enterGroups.append("text")
+        .attr("class", "company-label")
+        .attr("x", -15)
+        .attr("y", 5)
+        .style("font-size", "12px")
+        .text(d => d.company);
+
+      labelGroups.merge(enterGroups)
+        .transition()
+        .duration(1000)
+        .attr("transform", d => `translate(0, ${yScale(d.company) + yScale.bandwidth() / 2})`);
+
+      labelGroups.exit().remove();
+
       // 🔹 Achsen
       xAxis.transition()
         .duration(1000)
         .call(d3.axisBottom(xScale));
 
-      yAxis.transition()
-        .duration(1000)
-        .call(d3.axisLeft(yScale));
+      // yAxis entfernt, da wir eigene Labels haben
     }

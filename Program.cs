@@ -18,8 +18,8 @@ app.Map("/ws", async context =>
 
         while (socket.State == WebSocketState.Open)
         {
-            var values = generator.Generate();
-            var json = JsonSerializer.Serialize(values);
+            var transactions = generator.Generate();
+            var json = JsonSerializer.Serialize(transactions);
             var message = Encoding.UTF8.GetBytes(json);
             await socket.SendAsync(
                 message,
@@ -27,7 +27,7 @@ app.Map("/ws", async context =>
                 true,
                 CancellationToken.None
             );
-            await Task.Delay(5000);
+            await Task.Delay(1000);
         }
     }
     else
