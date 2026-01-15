@@ -29,3 +29,4 @@ C:\Users\vince\Desktop\NumberServer\bin\Debug\net9.0\ExcelDataReader.dll
 C:\Users\vince\Desktop\NumberServer\bin\Debug\net9.0\ExcelDataReader.DataSet.dll
 C:\Users\vince\Desktop\NumberServer\obj\Debug\net9.0\NumberServer.csproj.AssemblyReference.cache
 C:\Users\vince\Desktop\NumberServer\obj\Debug\net9.0\NumberSe.6E2DE29F.Up2Date
+C:\Users\vince\Desktop\NumberServer\obj\Debug\net9.0\NumberServer.sourcelink.json

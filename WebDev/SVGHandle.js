@@ -14,7 +14,7 @@ var data = [
 data .sort(function (a, b) { return b.value - a.value; });
 
 var margin = { top: 20, right: 30, bottom: 40, left: 90 },
-width = 460 - margin.left - margin.right,
+width = 1000 - margin.left - margin.right,
 height = 400 - margin.top - margin.bottom;
 // append the svg object to the body of the page
 var svg = d3.select("#bars")

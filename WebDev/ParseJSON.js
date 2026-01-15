@@ -27,8 +27,10 @@ const url = "ws://localhost:5244/ws";
                 company: key,
                 value: obj[key]
                 }));
-                test();
-
+                data.sort((a, b) => a.value - b.value);
+                LabelsandAxis();
+                CheckElementExists();
+               // test();
                // const labels = Object.keys(obj); // Array mit den Schlüsseln
               //  const values = labels.map(l => obj[l]);
               //  ensureChart(labels, values);
@@ -38,9 +40,9 @@ const url = "ws://localhost:5244/ws";
                // lastEl.innerText = event.data;
             }
         };
-function test() {
+//#region  SVG
 var margin = { top: 20, right: 30, bottom: 40, left: 90 },
-width = 460 - margin.left - margin.right,
+width = 1000 - margin.left - margin.right,
 height = 400 - margin.top - margin.bottom;
 // append the svg object to the body of the page
 var svg = d3.select("#bars")
@@ -51,11 +53,15 @@ var svg = d3.select("#bars")
 .append("g")
 .attr('style', 'background-color: lightblue')
 .attr("transform",
-"translate(" + margin.left + "," + margin.top + ")");
+"translate(" + margin.left + "," + margin.top + ")");  
 
+//#endregion
+var x;
+var y;
 
+function LabelsandAxis(){
 // Add X axis
-var x = d3.scaleLinear()
+ x = d3.scaleLinear()
 .domain([0, 1000])
 .range([0, width]);
 // Axis label X
@@ -65,16 +71,51 @@ svg.append("g") // g = text group
 .selectAll("text")
 .attr("transform", "translate(-10,0)rotate(-45)")
 .style("text-anchor", "end")
-.attr("class", "g") ;
+.attr("class", "g");
 // Y axis
-var y = d3.scaleBand()
+ y = d3.scaleBand()
 .range([0, height])
 .domain(data.map(function (d) { return d.company; }))
 .padding(.1);
 // Axis label Y
 
+data.forEach(element => {
+  
+});
+
 svg.append("g")
-.call(d3.axisLeft(y));
+.call(d3.axisLeft(y))
+ .attr("class", "y-axis");
+}
+
+function CheckElementExists() 
+{
+  data.forEach(element => {
+    const id = element.company.replace(/ /g, "_")
+    if (document.getElementById(id) )
+      {
+        console.log("Element exists: " + element.company);
+    d3.select("#"+id)//.style("fill", "orange")
+    .transition()
+    .duration(2000)
+    .attr("width", x(element.value));
+  }
+  else
+  {
+    console.log("Element  hinzugefügt" + element.company);
+      svg.append("rect")
+        .attr("x", x(0))
+        .attr("y", y(element.company))
+        .attr("width", x(element.value))
+        .attr("height", y.bandwidth())
+        .attr("fill", "#0d9475ff")
+        .attr("id", id);;
+  }
+  });
+}
+
+
+function test() {
 
 svg.selectAll("myRect").data(data).enter()
 .append("rect")
@@ -84,10 +125,7 @@ svg.selectAll("myRect").data(data).enter()
 .attr("height", y.bandwidth()) // Teilt die verfügbare höhe auf
 .attr("fill", "#0d9475ff")
 .attr("id", function(d){return d.company.replace(/ /g, "_");});
-
 }
-
-
 
 function triggerTransitionPiping()
 {  

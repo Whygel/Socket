@@ -4,3 +4,7 @@ g {
     font-weight: bold;
 }
 
+:fullscreen .hide-in-fullscreen {
+    display: none;
+}
+

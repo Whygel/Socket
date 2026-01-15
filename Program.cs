@@ -2,6 +2,7 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
 using RandomNumbers;
+using System.IO;
 
 // Zum SChlißen des Websocket : Strg + C im Terminal
 var builder = WebApplication.CreateBuilder(args);
@@ -26,7 +27,6 @@ app.Map("/ws", async context =>
                 true,
                 CancellationToken.None
             );
-
             await Task.Delay(5000);
         }
     }

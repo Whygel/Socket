@@ -18,5 +18,13 @@ namespace RandomNumbers
 			}
 			return result;
 		}
+
+
+		private class TransactionJSON
+		{
+			public string Company { get; set; }
+			public int Value { get; set; }
+			public byte[] Logo { get; set; }
+		}
 	}
 }
