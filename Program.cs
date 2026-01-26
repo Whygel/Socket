@@ -8,6 +8,10 @@ using System.IO;
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
+Random random = new Random();
+double currentPrice = 100.0;
+double StockAmount = 10000/currentPrice;
+DateTime currentDate = new DateTime(2015, 12, 1); // Startdatum
 app.UseWebSockets();
 app.Map("/ws", async context =>
 {
@@ -18,7 +22,10 @@ app.Map("/ws", async context =>
 
         while (socket.State == WebSocketState.Open)
         {
-            var transactions = generator.Generate();
+            if(false)
+            {
+            // var transactions = generator.Generate();
+            var transactions = generator.GenerateMonthly();
             var json = JsonSerializer.Serialize(transactions);
             var message = Encoding.UTF8.GetBytes(json);
             await socket.SendAsync(
@@ -27,7 +34,28 @@ app.Map("/ws", async context =>
                 true,
                 CancellationToken.None
             );
-            await Task.Delay(1000);
+            }
+            else{
+                // Preis und Datum aktualisieren
+            currentPrice += (random.NextDouble() - 0.5) * 2;
+            currentDate = currentDate.AddDays(1); // Einen Tag hochsetzen
+
+            var stockData = new
+            {
+                time = currentDate.ToString("o"), // ISO-Format
+                price = Math.Round(currentPrice, 2),
+                Value = currentPrice * StockAmount
+            };
+            var json =  JsonSerializer.Serialize(stockData);
+            var buffer = Encoding.UTF8.GetBytes(json);
+            await socket.SendAsync(
+                new ArraySegment<byte>(buffer),
+                WebSocketMessageType.Text,
+                true,
+                CancellationToken.None
+            );
+            }
+            await Task.Delay(100);
         }
     }
     else

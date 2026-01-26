@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echtzeit-Aktienkurs (Weigel)</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link href="ChartSytles.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="main-container">
+        <div id="controls">
+            <div>
+                <label for="lineColor">Linienfarbe:</label>
+                <input type="color" id="lineColor" value="#5691c8">
+            </div>
+            <div>
+                <label for="xScaleType">X-Achse Skalierung:</label>
+                <select id="xScaleType">
+                    <option value="linear">Linear</option>
+                    <option value="log">Logarithmisch</option>
+                </select>
+            </div>
+            <button id="fullscreenButton">Vollbild</button>
+            <div>
+                <label for="chartTitle">Diagramm Titel:</label>
+                <input type="text" id="chartTitle" placeholder="Diagramm Titel eingeben">
+            </div>
+        </div>
+        <div id="chart-container">
+            <svg id="chart" style="background-color: red;"></svg>
+            <div id="InfoBox"  flex-direction="column" >
+                    <p> current Value</p>
+                     <p id="ValuePara"> </p>
+                    <p> Date: </p>
+                     <p id="DatePara"> </p>
+            </div>            
+        </div>
+    </div>
+    <script src="Code.js"></script>
+</body>
+
+</html>

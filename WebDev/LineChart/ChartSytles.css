@@ -1,0 +1,33 @@
+.line {
+    stroke-width: 2;
+    fill: none;
+}
+
+.grid line {
+    stroke: #ddd;
+    stroke-width: 1;
+    opacity: 0.5;
+}
+.y-axis line {
+    display: none;
+}
+.x-axis path,
+.x-axis line,
+.y-axis path,
+.y-axis path{
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+.x-axis text{
+    font-size: 15; /* Erhöht die Schriftgröße der Achsen-Labels */
+    fill: #333; /* Dunklere Farbe für bessere Erkennbarkeit */
+}
+.y-axis text {
+    font-size: 18px; /* Erhöht die Schriftgröße der Achsen-Labels */
+    fill: #333; /* Dunklere Farbe für bessere Erkennbarkeit */
+}
+
+.grid path {
+    display: none;
+}

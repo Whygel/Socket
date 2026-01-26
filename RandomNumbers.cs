@@ -11,6 +11,7 @@ namespace RandomNumbers
 		private readonly Random _rng = new();
 		private readonly Dictionary<string, byte[]> _logos = new();
 		private readonly Dictionary<string, int> _lastValues = new();
+		private int _currentMonth = 1;
 
 		public RandomNumbersService()
 		{
@@ -51,6 +52,32 @@ namespace RandomNumbers
 					Logo = _logos[c]
 				});
 			}
+			return result;
+		}
+
+		public List<TransactionJSON> GenerateMonthly()
+		{
+			var result = new List<TransactionJSON>();
+			foreach (var c in _companies)
+			{
+				int newValue;
+				if (_currentMonth == 1)
+				{
+					newValue = _rng.Next(0, 1000);
+				}
+				else
+				{
+					newValue = (int)(_lastValues[c] * (0.95 + _rng.NextDouble() * 0.1));
+				}
+				_lastValues[c] = newValue;
+				result.Add(new TransactionJSON
+				{
+					Company = c,
+					Value = newValue,
+					Logo = _logos[c]
+				});
+			}
+			_currentMonth = _currentMonth % 12 + 1;
 			return result;
 		}
 	}
