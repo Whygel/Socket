@@ -65,17 +65,33 @@ body {
     display: flex;
     align-items: flex-start; 
     justify-content: flex-start;
-    position: relative;   
+    position: relative;  
+    margin-right: 100px; 
 }
 #InfoBox{
-    background-color: rebeccapurple;
-    margin-top: 100px;
+    margin-top: 155px;
     justify-content: flex-start;
+    flex-wrap: nowrap;
+    margin-left: 20px;
+}
+.InfoLabel {
+    font-size: 20px;
+    font-weight: bolder;
+    color: #333;
+    margin-bottom: 10px;
+
+}
+
+.InfoValue {
+    font-size: 24px;
+    font-weight: normal;
+    color: #000;
 }
 
 #chart {
-    flex: 1;
+    width: 70%;
     height: 100%;
+    max-width: 100%;
 }
 
 #controls {

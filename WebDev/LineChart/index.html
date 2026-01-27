@@ -29,14 +29,19 @@
                 <label for="chartTitle">Diagramm Titel:</label>
                 <input type="text" id="chartTitle" placeholder="Diagramm Titel eingeben">
             </div>
+            <button id="CmdStarten"> Starten </button>
         </div>
         <div id="chart-container">
-            <svg id="chart" style="background-color: red;"></svg>
-            <div id="InfoBox"  flex-direction="column" >
-                    <p> current Value</p>
-                     <p id="ValuePara"> </p>
-                    <p> Date: </p>
-                     <p id="DatePara"> </p>
+            <svg id="chart" ></svg>
+            <div id="InfoBox"   flex-direction="column" >
+                <div flowdirection="column">
+                    <span class="InfoLabel"> current Value: </span> 
+                    <span class="InfoValue" id="ValuePara"> </span>                    
+                </div>
+               <div flowdirection="row">
+                    <span class="InfoLabel"> Date: </span>
+                     <span class="InfoValue" id="DatePara"> </span>
+                </div>
             </div>            
         </div>
     </div>

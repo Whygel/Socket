@@ -1,6 +1,6 @@
 // Konfiguration
 const socketUrl = "ws://localhost:5244/ws"; // Ersetze mit deinem WebSocket-Server
-const margin = { top: 100, right: 20, bottom: 50, left: 50 };
+const margin = { top: 100, right: 0, bottom: 50, left: 50 };
 const width = 900 - margin.left - margin.right;
 const height = 500 - margin.top - margin.bottom;
 let xScaleType = "linear";
@@ -10,8 +10,10 @@ let lineColor = "#5691c8";
 // SVG-Container erstellen
 const svg = d3.select("#chart")
     .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+    .attr("preserveAspectRatio", "xMidYMid meet")
+    //.attr("width", width + margin.left + margin.right)
+    //.attr("height", height + margin.top + margin.bottom)
     .append("g")
     .style("background-color", "#f9f9f9")
     .attr("transform", `translate(${margin.left},${margin.top})`);
@@ -65,9 +67,14 @@ socket.onmessage = function(event) {
 function updateInvestment(data) {
         const lastData = data[data.length - 1];
     if (lastData) {
-        document.getElementById('investmentValue').textContent = lastData.investment.toFixed(2)+ "€";
-    }
-            document.getElementById('dateValue').textContent = lastData.time.split('T')[0] ;
+        document.getElementById('ValuePara').textContent = lastData.investment.toFixed(2)+ "€";
+    }        // Datum im Format TT.MM.JJJJ
+        const date = new Date(lastData.time);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        document.getElementById('DatePara').textContent = `${day}.${month}.${year}`;
+           // document.getElementById('DatePara').textContent = lastData.time.split('T')[0] ;
 
 }
    
@@ -111,6 +118,16 @@ function updateChart() {
         .call(yAxis);
 }
 //#region Interactivity Controls
+
+document.getElementById("CmdStarten").addEventListener("click", async () => {
+    // 1. Server informieren
+    const response = await fetch("/api/websocket/start", {
+        method: "POST"
+    });
+    if (response.ok) {
+        console.log("Server gestartet");
+    }
+});
 // Event-Listener für Farbauswahl
 document.getElementById('lineColor').addEventListener('input', function() {
     lineColor = this.value;
